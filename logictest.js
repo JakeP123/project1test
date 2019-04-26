@@ -64,7 +64,7 @@ function runQuery(numVideos, queryURL) {
         event.preventDefault();
 
         // Get search term
-        var queryTerm = $('#search').val().trim();
+        var queryTerm = $('#search-input').val().trim();
         console.log(queryTerm)
 
         // Add in the Search Term
