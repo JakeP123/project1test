@@ -111,8 +111,8 @@ function runQuery(queryURL) {
     //==========================================================
 
     $('#searchBtn').on('click', function (event) {
-        
-        event.preventDefault()
+        $('.panel-body').empty();
+        event.preventDefault();
       
 
         // Get search term
