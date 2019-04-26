@@ -1,68 +1,86 @@
-//URL pull for user data "change car oil https://www.googleapis.com/youtube/v3/videos?part=snippet&videoCategoryId=change+car+oil&key={YOUR_API_KEY}
-//Example with API //URL pull for user data "change car oil https://www.googleapis.com/youtube/v3/videos?part=snippet&videoCategoryId=change+car+oil&key=AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s
-// URL template https://www.googleapis.com/youtube/v3/videos?part=snippet&videoCategoryId=[USER INPUT]={YOUR_API_KEY}
-
-//API KEY AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s
-
-// sample ajax call GET https://www.youtube.com/search?part=snippet&topicId=/m/05z1_&type=video&key=AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s
-
-
-
-            //Will need to call video ID and paste into this URL         https://www.youtube.com/results?search_query=+"videoId"
-
-
-
-
-
 // SETUP VARIABLES
 //==========================================================
 
-var apiKey =  "AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s";
+var apiKey = "AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s";
 // var numVideos= 6;
 var queryTerm = "";
-var queryURLBase = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=plumbing&key=AIzaSyB1iL9inW_ZS71ILZyjrpM2w9vSbX0fL2s";
-var Finalsearch = "https://www.youtube.com/results?search_query=";
+var queryURLBase = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=" + apiKey;
+var Finalsearch = "https://www.youtube.com/watch?v=";
 var YouTubeSearch = "tutorial";
 var i = 0;
 // FUNCTIONS
 //==========================================================
 
-for (i=0; i < 6; i++) {
+// for (i=0; i < 5; i++) {
+
 function runQuery(numVideos, queryURL) {
     // AJAX Function
-    $.ajax({url: queryURLBase, method: "GET"})
-    .done(function(YoutubeData) {
-        console.log(YoutubeData);
-        var video = YoutubeData.items[0].id.videoId
+    $.ajax({ url: queryURL, method: "GET" })
+        .done(function (YoutubeData) {
 
-    // checking info
-        console.log(video)
-        console.log(Finalsearch+video)
-        console.log(queryURL)
-        $('#video-title').text(YoutubeData.items[0].snippet.title)
-        $('#video-url').html(queryURL)
+            for (var i = 0; i < 5; i++) {
+                console.log("====================================================");
+                console.log("VIDEO ID");
+                console.log(YoutubeData.items[i].id.videoId);
+                console.log("====================================================");
+                console.log("TITLE");
+                console.log(YoutubeData.items[i].snippet.title);
+                console.log("====================================================");
+                console.log("DESCRIPTION");
+                console.log(YoutubeData.items[i].snippet.description);
+                console.log("====================================================");
+                console.log("WORKING URL");
+                console.log(Finalsearch + YoutubeData.items[i].id.videoId);
+                console.log("====================================================");
 
+                //Start Dumping to HTML Here
+                var wellSection = $('<div>');
+                wellSection.addClass("well");
+                wellSection.attr('id', 'videoWell-' + i);
+                $('#wellSection').append(wellSection);
+
+                //Attach the content to the appropriate well
+                $("#videoWell-" + i).append("<a href="+Finalsearch+YoutubeData.items[i].id.videoId+">"+YoutubeData.items[i].snippet.title+"</a>");
+              //  $("#videoWell-" + i).append("<h1>"+ YoutubeData.items[i].snippet.title +"</h1>");
+                $("#videoWell-" + i).append("<h1>"+ YoutubeData.items[i].snippet.description +"</h1>");
+            }
+
+
+            //Logging to Console
+            console.log(YoutubeData);
+            console.log(queryURL);
+            console.log(queryURL)
+            $('#video-title').text(YoutubeData.items[0].snippet.title)
+            $('#video-url').html(queryURL)
+
+        })
+
+    }
+
+    // }
+    // MAIN PROCESSES
+    //==========================================================
+
+    $('#searchBtn').on('click', function (event) {
+        event.preventDefault();
+
+        // Get search term
+        queryTerm = $('#search').val().trim();
+        console.log(queryTerm)
+
+        // Add in the Search Term
+        var newURL = queryURLBase + "&q=" + queryTerm + "+" + YouTubeSearch;
+        console.log(newURL);
+
+        //Send the AJAX call the newly assembled URL
+
+        runQuery(3, newURL);
+
+        return false;
     })
-
-
-}
-}
-// MAIN PROCESSES
-//==========================================================
-
-$('#searchBtn').on('click', function(event) {
-    event.preventDefault();
-
-    var queryTerm = $('#search').val().trim();
-    console.log(queryTerm)
-    runQuery(3, Finalsearch+queryTerm);
-    console.log("lookingforthisclick")
-    return false;
-})
 
 // 1. Retrieve user inputs and convert to variables
 // 2. Use variable to run an AJAX call to YouTube
 // 3. Break down the YouTube API useable fields
 // 4. Dynamically generate html content
 // 5. Dealing with "edge cases" -- buds or situations that are not intuitive
-
