@@ -1,3 +1,4 @@
+alert("TEST");
 // SETUP VARIABLES
 //==========================================================
 
@@ -8,10 +9,13 @@ var queryURLBase = "https://www.googleapis.com/youtube/v3/search?part=snippet&ke
 var Finalsearch = "https://www.youtube.com/watch?v=";
 var YouTubeSearch = "tutorial";
 var i = 0;
+
 // FUNCTIONS
 //==========================================================
 
-// for (i=0; i < 5; i++) {
+$(document).ready(function() {
+
+
 
 function runQuery(numVideos, queryURL) {
     // AJAX Function
@@ -46,12 +50,7 @@ function runQuery(numVideos, queryURL) {
             }
 
 
-            //Logging to Console
-            console.log(YoutubeData);
-            console.log(queryURL);
-            console.log(queryURL)
-            $('#video-title').text(YoutubeData.items[0].snippet.title)
-            $('#video-url').html(queryURL)
+         
 
         })
 
@@ -65,11 +64,11 @@ function runQuery(numVideos, queryURL) {
         event.preventDefault();
 
         // Get search term
-        queryTerm = $('#search').val().trim();
+        var queryTerm = $('#search').val().trim();
         console.log(queryTerm)
 
         // Add in the Search Term
-        var newURL = queryURLBase + "&q=" + queryTerm + "+" + YouTubeSearch;
+        var newURL = queryURLBase + "&q=" + encodeURIComponent(queryTerm) + "+" + YouTubeSearch;
         console.log(newURL);
 
         //Send the AJAX call the newly assembled URL
@@ -78,6 +77,8 @@ function runQuery(numVideos, queryURL) {
 
         return false;
     })
+
+})
 
 // 1. Retrieve user inputs and convert to variables
 // 2. Use variable to run an AJAX call to YouTube
